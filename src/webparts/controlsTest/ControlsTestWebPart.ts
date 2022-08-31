@@ -8,16 +8,17 @@ import {
   ThemeChangedEventArgs,
   ThemeProvider,
 } from "@microsoft/sp-component-base";
-import { Version } from "@microsoft/sp-core-library";
+import {Version} from "@microsoft/sp-core-library";
 import {
   IPropertyPaneConfiguration,
   PropertyPaneTextField,
 } from "@microsoft/sp-property-pane";
-import { BaseClientSideWebPart } from "@microsoft/sp-webpart-base";
+import {BaseClientSideWebPart} from "@microsoft/sp-webpart-base";
 
 import ControlsTest from "./components/ControlsTest";
-import { IControlsTestProps } from "./components/IControlsTestProps";
-import { IControlsTestWebPartProps } from "./IControlsTestWebPartProps";
+import {IControlsTestProps} from "./components/IControlsTestProps";
+import {IControlsTestWebPartProps} from "./IControlsTestWebPartProps";
+import PeoplePickerTest, {PeoplePickerTestProps} from "./components/PeoplePickerTest";
 
 /**
  * Web part to test the React controls
@@ -25,6 +26,7 @@ import { IControlsTestWebPartProps } from "./IControlsTestWebPartProps";
 export default class ControlsTestWebPart extends BaseClientSideWebPart<IControlsTestWebPartProps> {
   private _themeProvider: ThemeProvider;
   private _themeVariant: IReadonlyTheme | undefined;
+
   protected async onInit(): Promise<void> {
 
 
@@ -76,20 +78,10 @@ export default class ControlsTestWebPart extends BaseClientSideWebPart<IControls
        }
      ); */
 
-const element: React.ReactElement<IControlsTestProps> = React.createElement(
-
-    ControlsTest,
+    const element: React.ReactElement<PeoplePickerTestProps> = React.createElement(
+      PeoplePickerTest,
       {
-
-        themeVariant: this._themeVariant,
         context: this.context,
-        description: this.properties.description,
-        title: this.properties.title,
-        displayMode: this.displayMode,
-        updateProperty: (value: string) => {
-          this.properties.title = value;
-        },
-        totalPages: this.properties.totalPages
       }
     );
 
