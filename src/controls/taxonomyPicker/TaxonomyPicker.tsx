@@ -173,8 +173,8 @@ export class TaxonomyPicker extends React.Component<ITaxonomyPickerProps, ITaxon
           loaded: true
         });
       })
-      .catch(() => {
-        // no-op;
+      .catch((error) => {
+        console.log(error);
       });
   }
 

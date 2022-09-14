@@ -11,8 +11,7 @@ export interface PeoplePickerTestProps {
 const PeoplePickerTest = (props: PeoplePickerTestProps) => {
   return (<DynamicForm
     context={props.context}
-    listId={"d80d1af9-7ecd-46ec-9aff-e8fd888c8bc4"}
-    listItemId={15}
+    listId={"4259e2de-3a53-4db6-b66a-d387b2e373a2"}
   />)
 };
 
