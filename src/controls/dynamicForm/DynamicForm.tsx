@@ -329,45 +329,49 @@ export class DynamicForm extends React.Component<IDynamicFormProps, IDynamicForm
       const tempFields: IDynamicFieldProps[] = [];
       let order: number = 0;
       const responseValue = listFeilds.value;
+      const hiddenFields = this.props.hiddenFields !== undefined ? this.props.hiddenFields : [];
       for (let i = 0, len = responseValue.length; i < len; i++) {
         const field = responseValue[i];
-        order++;
-        const fieldType = field.TypeAsString;
-        field.order = order;
-        let hiddenName = "";
-        let termSetId = "";
-        let anchorId = "";
-        let lookupListId = "";
-        let lookupField = "";
-        const choices: IDropdownOption[] = [];
-        let defaultValue = null;
-        const selectedTags: any = []; // eslint-disable-line @typescript-eslint/no-explicit-any
-        let richText = false;
-        let dateFormat: DateFormat | undefined;
-        let principalType = "";
-        if (item !== null) {
-          defaultValue = item[field.EntityPropertyName];
-        }
-        else {
-          defaultValue = field.DefaultValue;
-        }
-        if (fieldType === 'Choice' || fieldType === 'MultiChoice') {
-          field.Choices.forEach(element => {
-            choices.push({ key: element, text: element });
-          });
-        }
-        else if (fieldType === "Note") {
-          richText = field.RichText;
-        }
-        else if (fieldType === "Lookup") {
-          lookupListId = field.LookupList;
-          lookupField = field.LookupField;
+
+        // Handle only fields that are not marked as hidden
+        if (hiddenFields.indexOf(field.EntityPropertyName) < 0) {
+          order++;
+          const fieldType = field.TypeAsString;
+          field.order = order;
+          let hiddenName = "";
+          let termSetId = "";
+          let anchorId = "";
+          let lookupListId = "";
+          let lookupField = "";
+          const choices: IDropdownOption[] = [];
+          let defaultValue = null;
+          const selectedTags: any = []; // eslint-disable-line @typescript-eslint/no-explicit-any
+          let richText = false;
+          let dateFormat: DateFormat | undefined;
+          let principalType = "";
           if (item !== null) {
-            defaultValue = await this._spService.getLookupValue(listId, listItemId, field.EntityPropertyName, lookupField, this.webURL);
+            defaultValue = item[field.EntityPropertyName];
           }
           else {
-            defaultValue = [];
+            defaultValue = field.DefaultValue;
           }
+          if (fieldType === 'Choice' || fieldType === 'MultiChoice') {
+            field.Choices.forEach(element => {
+              choices.push({ key: element, text: element });
+            });
+          }
+          else if (fieldType === "Note") {
+            richText = field.RichText;
+          }
+          else if (fieldType === "Lookup") {
+            lookupListId = field.LookupList;
+            lookupField = field.LookupField;
+            if (item !== null) {
+              defaultValue = await this._spService.getLookupValue(listId, listItemId, field.EntityPropertyName, lookupField, this.webURL);
+            }
+            else {
+              defaultValue = [];
+            }
 
         }
         else if (fieldType === "LookupMulti") {
@@ -384,7 +388,7 @@ export class DynamicForm extends React.Component<IDynamicFormProps, IDynamicForm
           const response = await this._spService.getTaxonomyFieldInternalName(this.props.listId, field.InternalName, this.webURL);
           hiddenName = response.value;
           termSetId = field.TermSetId;
-          anchorId = field.AnchorId;
+            anchorId = field.AnchorId;
           if (item !== null) {
             item[field.InternalName].forEach(element => {
               selectedTags.push({ key: element.TermGuid, name: element.Label });
